@@ -63,8 +63,9 @@
       var windchill = (weatherData.currently.apparentTemperature) <= 55;
 
       // then we merge the two using a ternary operator
-
       var DINAJ = windchill || badWeather ? "You should bring a jacket with you." : "You should leave your jacket at home."
+
+      // now we set the "weather" tag to a sentence.
       document.getElementById("weather").innerHTML = "In " + townName + ", it is currently " + Math.round(weatherData.currently.temperature) + "°. " + weatherData.currently.summary + ". " + DINAJ; 
     });
     </script>
