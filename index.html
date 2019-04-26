@@ -51,19 +51,19 @@
       // then we use the above information to get the weather
       var weatherLink = 'https://cors-anywhere.herokuapp.com/' + "https://api.darksky.net/forecast/d11406c31769ff7130c6605f5c4378e2/" + latitudeLongitude;
       //if you steal this api key shame on you
-      var weatherJson = httpGet(weatherLink);
-      var weatherData = JSON.parse(weatherJson);
+      var weatherJSON = httpGet(weatherLink);
+      var weatherData = JSON.parse(weatherJSON);
 
       // parsing of useful information - this is for DINAJ emulation
       // first we check for if it's bad weather
       // we do this by checking weather is a bad weather in the range [rain, snow, sleet, hail, thunderstorm, tornado]
-      var badWeather = ["Rain", "Snow", "Sleet", "Wind", "Hail", "Thunderstorm", "Tornado"].includes(weatherData.currently.icon)
+      var badWeather = ["rain", "snow", "sleet", "wind", "hail", "thunderstorm", "tornado"].includes(weatherData.currently.icon)
 
       // after that, we check if windchill <= 55
       var windchill = (weatherData.currently.apparentTemperature) <= 55;
 
       // then we merge the two using a ternary operator
-      var DINAJ = windchill || badWeather ? "You should bring a jacket with you." : "You should leave your jacket at home."
+      var DINAJ = (windchill || badWeather)? "You should bring a jacket with you." : "You should leave your jacket at home."
 
       // now we set the "weather" tag to a sentence.
       document.getElementById("weather").innerHTML = "In " + townName + ", it is currently " + Math.round(weatherData.currently.temperature) + "°. " + weatherData.currently.summary + ". " + DINAJ; 
