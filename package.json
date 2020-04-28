@@ -1,0 +1,23 @@
+{
+  "name": "startpage",
+  "version": "1.0.0",
+  "main": "index.html",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/matthewjenkins97/startpage.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/matthewjenkins97/startpage/issues"
+  },
+  "homepage": "https://github.com/matthewjenkins97/startpage#readme",
+  "description": "",
+  "devDependencies": {
+    "eslint": "^6.8.0",
+    "eslint-config-google": "^0.14.0"
+  }
+}
