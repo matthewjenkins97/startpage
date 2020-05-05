@@ -39,6 +39,7 @@ async function main() {
   const locLink = 'https://maps.googleapis.com/maps/api/geocode/json?latlng=' +
   position.coords.latitude + ',' + position.coords.longitude +
   '&result_type=postal_code&key=AIzaSyBJxuWE2w3dZAB3IsYjjVTsMzI6Asr56u4';
+  // Not sure how to not have the API key visible, but here we are.
   const locData = await dataFetch(locLink);
   const townName = locData.results[0].address_components[1].long_name;
 
@@ -61,13 +62,14 @@ async function main() {
       701, 711, 721, 731, 741, 751, 761, 762, 771, 781, // atmosphere
     ].includes(weatherData.current.weather[0].id);
 
-  // after that, we check if windchill <= 60 - this is definitely arbitrary
-  const windchill = weatherData.current.feels_like <= 60;
+  // after that, we check if windchill <= 65
+  // washington post has a nice article as to why 65 is a good threshold:
+  // https://www.washingtonpost.com/weather/2018/10/30/weather-is-what-you-wear-unpacking-clothing-connected-different-climate-conditions-united-states/
+  const windchill = weatherData.current.feels_like < 65;
 
-  // then we merge the two using a ternary operator
   const DINAJ = (windchill || badWeather) ?
-  'You should bring a jacket with you.' :
-  'You should leave your jacket at home.';
+  'You should bring a jacket with you, ' :
+  'You should leave your jacket at home, ';
 
   // now we set the 'weather' tag to a sentence.
   document.getElementById('weather').innerHTML =
