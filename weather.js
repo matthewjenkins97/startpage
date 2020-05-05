@@ -68,8 +68,8 @@ async function main() {
   const windchill = weatherData.current.feels_like < 65;
 
   const DINAJ = (windchill || badWeather) ?
-  'You should bring a jacket with you, ' :
-  'You should leave your jacket at home, ';
+  'You should bring a jacket with you.' :
+  'You should leave your jacket at home.';
 
   // now we set the 'weather' tag to a sentence.
   document.getElementById('weather').innerHTML =
