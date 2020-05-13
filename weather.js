@@ -39,6 +39,7 @@ async function main() {
   const locLink = 'https://maps.googleapis.com/maps/api/geocode/json?latlng=' +
   position.coords.latitude + ',' + position.coords.longitude +
   '&result_type=postal_code&key=AIzaSyBJxuWE2w3dZAB3IsYjjVTsMzI6Asr56u4';
+
   // Not sure how to not have the API key visible, but here we are.
   const locData = await dataFetch(locLink);
   const townName = locData.results[0].address_components[1].long_name;
@@ -52,24 +53,45 @@ async function main() {
   const weatherData = await dataFetch(weatherLink);
 
   // parsing of useful information - this is for DINAJ emulation
-  // first we check for if it's bad weather
-  // we do this by checking weather is a bad weather by OpenWeatherMap's ID.
-  const badWeather =
-    [200, 201, 202, 210, 211, 212, 221, 230, 231, 232, // thunderstorms
-      300, 301, 302, 310, 311, 312, 313, 314, 321, // drizzle
-      500, 501, 502, 503, 504, 511, 520, 521, 522, 531, // rain
-      600, 601, 602, 611, 612, 613, 615, 616, 620, 621, 622, // snow
-      701, 711, 721, 731, 741, 751, 761, 762, 771, 781, // atmosphere
-    ].includes(weatherData.current.weather[0].id);
+  // first we check for if it's light or heavy bad weather
+  // we do this by checking weather is a light or heavy bad weather by 
+  // OpenWeatherMap's ID.
+  const weatherID = weatherData.current.weather[0].id
 
-  // after that, we check if windchill <= 65
-  // washington post has a nice article as to why 65 is a good threshold:
+  // light means light rain, snow, drizzle, etc.
+  const lightPrecipitation = 
+  [200, 221, 230, 
+  300, 310, 
+  500, 520, 531,
+  600, 612, 615, 620,
+  701, 731].includes(weatherID); 
+  // heavy means medium + heavy rain, snow drizzle, etc.
+  const heavyPrecipitation = 
+  [201, 202, 231, 232, 
+  301, 302, 311, 312, 313, 314, 321,
+  501, 502, 503, 504, 511, 521, 522,
+  601, 602, 611, 613, 616, 621, 622,
+  751, 761, 762, 771, 781].includes(weatherID);
+
+  // after that, we check windchill against whatever washington post
   // https://www.washingtonpost.com/weather/2018/10/30/weather-is-what-you-wear-unpacking-clothing-connected-different-climate-conditions-united-states/
-  const windchill = weatherData.current.feels_like < 65;
+  const windchill = weatherData.current.feels_like;
 
-  const DINAJ = (windchill || badWeather) ?
-  'You should bring a jacket with you.' :
-  'You should leave your jacket at home.';
+  // let me know how to improve this code in a pull request. 
+  // if-else blocks annoy me.
+  let DINAJ = '';
+  if ((windchill < 25) || heavyPrecipitation) {
+    DINAJ = 'You should bring a heavy jacket with you.';
+  } 
+  else if ((windchill >= 25 && windchill < 45) || lightPrecipitation) {
+    DINAJ = 'You should bring a light jacket with you.';
+  }
+  else if (windchill >= 45 && windchill < 65) {
+    DINAJ = 'You should bring a sweater or fleece with you.';
+  }
+  else if (windchill >= 65) {
+    DINAJ = 'You should leave your jacket at home.';
+  } 
 
   // now we set the 'weather' tag to a sentence.
   document.getElementById('weather').innerHTML =
