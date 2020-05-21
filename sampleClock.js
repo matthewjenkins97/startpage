@@ -35,9 +35,6 @@ function formatAMPM(date) {
   let hours = date.getHours();
   let minutes = date.getMinutes().toString();
   let seconds = date.getSeconds().toString();
-
-  console.log(hours)
-
   const ampm = hours >= 12 ? 'pm' : 'am';
 
   hours %= 12;
