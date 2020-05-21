@@ -32,11 +32,15 @@ function formatAMPM(date) {
   Input: date, a Date object.
   Output: String, which formats the date in a nice way and returns it.
   */
-  let hours = date.getHours() % 12;
+  let hours = date.getHours();
   let minutes = date.getMinutes().toString();
   let seconds = date.getSeconds().toString();
+
+  console.log(hours)
+
   const ampm = hours >= 12 ? 'pm' : 'am';
 
+  hours %= 12;
   hours = hours ? hours : 12; // the hour '0' should be '12'
 
   minutes = minutes.padStart(2, '0');
