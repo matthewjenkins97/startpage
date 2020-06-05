@@ -59,19 +59,30 @@ async function main() {
   const weatherID = weatherData.current.weather[0].id
 
   // light means light rain, snow, drizzle, etc.
-  const lightPrecipitation = 
+  let lightPrecipitation = 
   [200, 221, 230, 
   300, 310, 
   500, 520, 531,
   600, 612, 615, 620,
   701, 731].includes(weatherID); 
   // heavy means medium + heavy rain, snow drizzle, etc.
-  const heavyPrecipitation = 
+  let heavyPrecipitation = 
   [201, 202, 231, 232, 
   301, 302, 311, 312, 313, 314, 321,
   501, 502, 503, 504, 511, 521, 522,
   601, 602, 611, 613, 616, 621, 622,
   751, 761, 762, 771, 781].includes(weatherID);
+
+  // taking daily rainfall into account.
+  // moderate precipitation - 2.6 to 7.6 mm per hour
+  // heavy precipitation - 7.7 mm per hour and above.
+  // get daily rainfall, divide it by 24, then check against those values?
+  const hourlyRainfall = weatherData.daily[0].rain / 24;
+  if (hourlyRainfall > 7.6) {
+    heavyPrecipitation = true;
+  } else if (hourlyRainfall < 7.6 && hourlyRainfall > 2.6) {
+    lightPrecipitation = true;
+  } 
 
   // after that, we check windchill against whatever washington post
   // https://www.washingtonpost.com/weather/2018/10/30/weather-is-what-you-wear-unpacking-clothing-connected-different-climate-conditions-united-states/
@@ -89,8 +100,11 @@ async function main() {
   else if (windchill >= 45 && windchill < 65) {
     DINAJ = 'You should bring a sweater or fleece with you.';
   }
-  else if (windchill >= 65) {
+  else if (windchill >= 65 && windchill < 80) {
     DINAJ = 'You should leave your jacket at home.';
+  } 
+  else {
+    DINAJ = 'You should leave your jacket at home. Consider wearing shorts.';
   } 
 
   // now we set the 'weather' tag to a sentence.
