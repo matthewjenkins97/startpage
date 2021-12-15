@@ -38,11 +38,11 @@ async function main() {
   // Getting town name from google maps
   const locLink = 'https://maps.googleapis.com/maps/api/geocode/json?latlng=' +
   position.coords.latitude + ',' + position.coords.longitude +
-  '&result_type=postal_code&key=AIzaSyBJxuWE2w3dZAB3IsYjjVTsMzI6Asr56u4';
+  '&result_type=street_address&key=AIzaSyBJxuWE2w3dZAB3IsYjjVTsMzI6Asr56u4';
 
   // Not sure how to not have the API key visible, but here we are.
   const locData = await dataFetch(locLink);
-  const townName = locData.results[0].address_components[1].long_name;
+  const townName = locData.results[0].address_components[2].long_name;
 
   // Then we use the above information to get the weather
   const weatherLink =
