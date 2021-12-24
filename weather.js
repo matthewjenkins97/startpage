@@ -36,7 +36,7 @@ async function main() {
   const position = await getPosition();
 
   // Getting town name from openweatherapi
-  const locLink = `http://api.openweathermap.org/geo/1.0/reverse?lat=${position.coords.latitude}&lon=${position.coords.longitude}&appid=ca11bc01901b6f102466843f5831713f`;
+  const locLink = `https://api.openweathermap.org/geo/1.0/reverse?lat=${position.coords.latitude}&lon=${position.coords.longitude}&appid=ca11bc01901b6f102466843f5831713f`;
 
   // Not sure how to not have the API key visible, but here we are.
   const locData = await dataFetch(locLink);
