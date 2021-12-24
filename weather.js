@@ -35,20 +35,16 @@ async function main() {
   // as well as for the OpenWeatherMap api
   const position = await getPosition();
 
-  // Getting town name from google maps
-  const locLink = 'https://maps.googleapis.com/maps/api/geocode/json?latlng=' +
-  position.coords.latitude + ',' + position.coords.longitude +
-  '&result_type=street_address&key=AIzaSyBJxuWE2w3dZAB3IsYjjVTsMzI6Asr56u4';
+  // Getting town name from openweatherapi
+  const locLink = `http://api.openweathermap.org/geo/1.0/reverse?lat=${position.coords.latitude}&lon=${position.coords.longitude}&appid=ca11bc01901b6f102466843f5831713f`;
 
   // Not sure how to not have the API key visible, but here we are.
   const locData = await dataFetch(locLink);
-  const townName = locData.results[0].address_components[2].long_name;
+  const townName = locData[0].name;
 
   // Then we use the above information to get the weather
-  const weatherLink =
-  'https://api.openweathermap.org/data/2.5/onecall?lat=' +
-  position.coords.latitude + '&lon=' + position.coords.longitude +
-  '&units=imperial&appid=ca11bc01901b6f102466843f5831713f';
+  const weatherLink = `https://api.openweathermap.org/data/2.5/onecall?lat=${position.coords.latitude}&lon=${position.coords.longitude}&units=imperial&appid=ca11bc01901b6f102466843f5831713f`;
+  
   // Not sure how to not have the API key visible, but here we are.
   const weatherData = await dataFetch(weatherLink);
 
@@ -56,7 +52,7 @@ async function main() {
   // first we check for if it's light or heavy bad weather
   // we do this by checking weather is a light or heavy bad weather by 
   // OpenWeatherMap's ID.
-  const weatherID = weatherData.current.weather[0].id
+  const weatherID = weatherData.current.weather[0].id;
 
   // light means light rain, snow, drizzle, etc.
   let lightPrecipitation = 
@@ -84,7 +80,7 @@ async function main() {
     lightPrecipitation = true;
   } 
 
-  // after that, we check windchill against whatever washington post
+  // after that, we check windchill against whatever washington post says
   // https://www.washingtonpost.com/weather/2018/10/30/weather-is-what-you-wear-unpacking-clothing-connected-different-climate-conditions-united-states/
   const windchill = weatherData.current.feels_like;
 
@@ -108,10 +104,7 @@ async function main() {
   } 
 
   // now we set the 'weather' tag to a sentence.
-  document.getElementById('weather').innerHTML =
-  'In ' + townName + ', it is currently ' +
-  Math.round(weatherData.current.temp) + '°. ' +
-  weatherData.current.weather[0].main + '. ' + DINAJ;
+  document.getElementById('weather').innerHTML = `In ${townName}, it is currently ${Math.round(weatherData.current.temp)}°. ${weatherData.current.weather[0].main}. ${DINAJ}`
 };
 
 main();
