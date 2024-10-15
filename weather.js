@@ -43,7 +43,7 @@ async function main() {
   const townName = locData[0].name;
 
   // Then we use the above information to get the weather
-  const weatherLink = `https://api.openweathermap.org/data/3.0/onecall?lat=${position.coords.latitude}&lon=${position.coords.longitude}&appid=ca11bc01901b6f102466843f5831713f`;
+  const weatherLink = `https://api.openweathermap.org/data/3.0/onecall?lat=${position.coords.latitude}&lon=${position.coords.longitude}&units=imperial&appid=ca11bc01901b6f102466843f5831713f`;
   
   // Not sure how to not have the API key visible, but here we are.
   const weatherData = await dataFetch(weatherLink);
