@@ -52,7 +52,7 @@ async function main() {
   // first we check for if it's light or heavy bad weather
   // we do this by checking weather is a light or heavy bad weather by 
   // OpenWeatherMap's ID.
-  const weatherID = weatherData.current.weather[0].id;
+  const weatherID = weatherData.data.weather[0].id;
 
   // light means light rain, snow, drizzle, etc.
   let lightPrecipitation = 
